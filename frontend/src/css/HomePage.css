@@ -1,0 +1,196 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans");
+@import url('https://fonts.googleapis.com/css?family=Proxima+Nova');
+
+.body {
+  font-family: 'proxima-nova', sans-serif !important;
+}
+
+.home-page {
+  margin: 10px;
+  text-align: center;
+  justify-content: space-between;
+}
+
+.homepage-header {
+  font-family: 'proxima-nova', sans-serif;
+  font-weight: 100;
+}
+
+.homepage-header h1 {
+  font-size: 40px;
+  font-style: italic;
+  color: rgb(198, 198, 198);
+  margin: 10px;
+  padding: 10px;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px #000000;
+  opacity: 1;
+}
+
+.formBasicEmail::placeholder {
+  color: #ffffff;
+}
+
+.form-control::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: rgb(184, 181, 181) !important;
+    opacity: 1; /* Firefox */
+}
+
+
+
+.centered {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  background: rgba(114, 114, 114, 0.9);
+  padding: 20px;
+  margin: 20px;
+  border-radius: 10px;
+  opacity: 1;
+  width: 69%;
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: right;
+  background-color: rgb(46, 45, 45);
+  opacity: 1;
+}
+
+.navbar-brand {
+  font-family: "Open Sans", sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px;
+  margin: 10px;
+}
+
+.homepage-background {
+  background-image: url("../images/yorick my beloved.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  filter: grayscale(100%);
+  opacity: 0.9;
+}
+
+#summoner-central {
+  color: white;
+  padding-top: 3px;
+  font-size: 20px;
+}
+
+#form-summoner-name-header {
+  padding-top: 10px;
+  margin: auto;
+}
+
+/* generate styling for the login button located within the navbar
+its className is navbar-login-button 
+make sure to give it a hover effect as well so it changes color when the user hovers over it
+also make the color of the text black
+make the color of the button rgb(163, 253, 163)
+*/
+
+.navbar-login-button {
+  width: 80px;
+  margin-left: 10px;
+  background-color: rgb(163, 253, 163) !important; /* add !important */
+  color: black !important;   
+  font-weight: bold;
+}
+
+.navbar-right-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* add this property */
+  margin: 10px
+}
+
+.navbar-signup-button {
+  width: 85px;
+  margin-left: 10px;
+  background-color: rgb(163, 253, 163) !important; /* add !important */
+  color: black !important;   
+  font-weight: bold;
+}
+
+.navbar-signup-button:hover, .navbar-login-button:hover {
+  background-color: rgb(117, 250, 117) !important; /* add !important */
+  color: black !important;   
+  font-weight: bold;
+}
+
+.signup-modal-h4 {
+  font-size: 20px;
+  padding-bottom: 10px;
+}
+
+.signup-modal-dialog .modal-content {
+  background-color: rgb(35, 35, 35); /* Replace with your desired color */
+}
+
+.login-modal .modal-content {
+  background-color: rgb(35, 35, 35); /* Replace with your desired color */
+}
+
+.signup-modal-dialog input[type="email"],
+.signup-modal-dialog input[type="password"],
+.signup-modal-dialog input[type="text"] {
+  background-color: #333;
+  color: #fff;
+}
+
+.form-control::placeholder {
+  color: #9c9c9c;
+}
+
+#contained-modal-title-vcenter, .signup-modal-h4, .form-label, .modal-body-text {
+  color:rgb(233, 233, 233)
+
+}
+
+.form-group input[type="email"]::placeholder {
+  /* Your placeholder text styling here */
+  color: #ededed; /* Example color */
+  font-style: italic; /* Example font style */
+}
+
+/* Increase specificity */
+.form-group .placeholder-input::placeholder {
+  color: #a42424;
+  font-style: italic;
+}
+
+
+#form-input {
+  background-color: rgb(35, 35, 35);
+  color: rgb(233, 233, 233);
+}
+
+.navbar-logout-button {
+  width: 85px;
+  margin-left: 10px;
+  background-color: rgb(255, 98, 98) !important; /* add !important */
+  color: black !important;   
+}
+
+.navbar-logout-button:hover {
+    background-color: rgb(255, 43, 43) !important; /* add !important */
+    font-weight: bold;
+}
+
+.login-modal input[type="email"],
+.login-modal input[type="password"],
+.signup-modal input[type="text"] {
+  background-color: #333;
+  color: #fff;
+}

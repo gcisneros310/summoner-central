@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css?family=Proxima+Nova');
+
+.body {
+  font-family: 'proxima-nova', sans-serif !important;
+}
+
+.summoner-input-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.summoner-input-field {
+  width: 300px;
+  font-family: 'proxima-nova', sans-serif;
+
+}
+
+.summoner-form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Open Sans', sans-serif;
+
+}
+
+.summoner-form-button {
+  width: 80px;
+  margin-left: 10px;
+  background-color: rgb(163, 253, 163);
+  color: black;
+  font-weight: bold;
+  font-family: 'Open Sans', sans-serif;
+
+}
+
+.summoner-form-button:hover {
+  background-color: rgb(118, 245, 118);
+}
+
+.summoner-form-label {
+  text-align: center;
+  margin-right: 10px;
+}
