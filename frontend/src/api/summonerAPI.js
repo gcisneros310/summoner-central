@@ -18,18 +18,9 @@ const getMatchInfoByMatchID = async (matchID) => {
     return await axios.get(`/api/match-info/${matchID}`)
 }
 
-const savePlayerObject = async (playerObject) => {
-    axios.post('/api/save-player-object', playerObject, {
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-        .then(response => {
-            console.log(response.data);
-        })
-        .catch(error => {
-            console.error(error);
-        });
+const getSummonerMasteries = async (summonerID) => {
+    console.log('summonerAPI invoked for summoner masteries')
+    return await axios.get(`/api/get-summoner-masteries/${summonerID}`)
 }
 
 
@@ -41,6 +32,15 @@ export const getSummonerInformation = async (summonerName) => {
     const summonerInfoResponse = await getSummonerInfoByName(summonerName); // get summoner information object
     const summonerInfo = summonerInfoResponse.data;
     console.log("Summoner Info RETURNED FROM ENDPOINT: ", summonerInfo);
+
+    console.log('getting summoner masteries')
+    console.log('summonerID:', summonerInfo.id)
+    const summonerMasteriesResponse = await getSummonerMasteries(summonerInfo.puuid);
+
+    const summonerDataAndMasteries = {
+        ...summonerInfo,
+        summonerMasteries: summonerMasteriesResponse.data,
+    }
 
     const matchHistoryResponse = await getMatchListBySummID(summonerInfo.puuid, summonerName); // get the list of match IDs
     const matchHistory = matchHistoryResponse.data;
@@ -60,18 +60,18 @@ export const getSummonerInformation = async (summonerName) => {
 
     console.log('match info object is:', JSON.stringify(matchInfoObject));
 
-    const summonerData = {
-        ...summonerInfo,
+    var completeSummonerData = {
+        ...summonerDataAndMasteries,
         matchInformation: matchInfoObject,
     }
 
-    // invoke saveplayerobject to save the summonerData object to a JSON file
-    // const savePlayerObjectResponse = await savePlayerObject(summonerData);
+    // invoke saveplayerobject to save the completeSummonerData object to a JSON file
+    // const savePlayerObjectResponse = await savePlayerObject(completeSummonerData);
     // if (savePlayerObjectResponse.status === 200) {
-    //     console.log('summonerData has been saved to exampleData.json');
+    //     console.log('completeSummonerData has been saved to exampleData.json');
     // } else {
-    //     console.log('Error saving summonerData to exampleData.json');
+    //     console.log('Error saving completeSummonerData to exampleData.json');
     // }
 
-    return summonerData;
+    return completeSummonerData;
 };

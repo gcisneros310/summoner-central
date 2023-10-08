@@ -35,20 +35,16 @@ router.get('/match-info/:matchID', async (req, res) => {
   }
 })
 
-router.post('/save-player-object', async (req, res) => {
-  const playerObject = req.body; // Now you can directly access the JSON object in the request body
-  console.log('summonerData received:', playerObject);
-
-  // write the playerObject to a JSON file named exampleData.json
-  fs.writeFile('exampleData.json', JSON.stringify(playerObject), (err) => {
-    if (err) {
-      console.error(err);
-      res.status(500).send('Error writing file');
-      return;
-    }
-    console.log('summonerData has been saved to exampleData.json');
-    res.send('summonerData has been saved to exampleData.json');
-  });
+router.get('/get-summoner-masteries/:summonerID', async (req, res) => {
+  const { summonerID } = req.params;
+  console.log('get-summoner-masteries invoked in apiRoutes.js')
+  console.log('summonerID:', summonerID)
+  try {
+    const summonerMasteries = await lolController.getSummonerMasteries(summonerID);
+    res.json(summonerMasteries);
+  } catch (error) {
+    console.log('Failed to get summoner masteries:', error);
+  }
 })
 
 

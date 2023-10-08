@@ -104,8 +104,44 @@ const getMatchInfoById = async (matchId) => {
   }
 };
 
+const getSummonerMasteries = async (summonerID) => {
+  try {
+    console.log('INSIDE THE getSummonerMasteries\n');
+    console.log('summonerID:', summonerID);
+    console.log('\nRetrieving summoner masteries in lolController.js');
+
+    const response = await axios.get(
+      `https://na1.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-puuid/${summonerID}`,
+      {
+        headers: {
+          "X-Riot-Token": process.env.RIOT_API_KEY,
+        }
+      }
+    );
+
+    const summonerMasteries = response.data;
+    return summonerMasteries;
+  } catch (error) {
+    if (error.response && error.response.status === 404) {
+      throw new Error(`Summoner "${summonerID}" not found`);
+    } else if (error.response && error.response.status === 403) {
+      throw new Error("Riot API key is invalid");
+    } else if (error.response && error.response.status === 400) {
+      throw new Error("Summoner ID is invalid");
+    } else if (error.response && error.response.status === 429) {
+      throw new Error("Rate limit exceeded");
+    } else if (error.response && error.response.status === 500) {
+      throw new Error("Internal server error");
+    } else {
+      throw new Error("Error retrieving summoner masteries");
+    }
+  }
+}
+
+
 module.exports = {
   getSummonerInfoByName,
   getMatchListBySummID,
-  getMatchInfoById
+  getMatchInfoById,
+  getSummonerMasteries
 };
