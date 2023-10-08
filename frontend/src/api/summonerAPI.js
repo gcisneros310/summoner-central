@@ -23,11 +23,6 @@ const getSummonerMasteries = async (summonerID) => {
     return await axios.get(`/api/get-summoner-masteries/${summonerID}`)
 }
 
-
-// sends multiple requests to API to return one object
-// one request is made to the API to retrieve summoner information
-// another request is made to the API to retrieve match history
-// multiple requests are made to get each match's information, at the moment the total is 10
 export const getSummonerInformation = async (summonerName) => {
     const summonerInfoResponse = await getSummonerInfoByName(summonerName); // get summoner information object
     const summonerInfo = summonerInfoResponse.data;
@@ -64,14 +59,6 @@ export const getSummonerInformation = async (summonerName) => {
         ...summonerDataAndMasteries,
         matchInformation: matchInfoObject,
     }
-
-    // invoke saveplayerobject to save the completeSummonerData object to a JSON file
-    // const savePlayerObjectResponse = await savePlayerObject(completeSummonerData);
-    // if (savePlayerObjectResponse.status === 200) {
-    //     console.log('completeSummonerData has been saved to exampleData.json');
-    // } else {
-    //     console.log('Error saving completeSummonerData to exampleData.json');
-    // }
 
     return completeSummonerData;
 };

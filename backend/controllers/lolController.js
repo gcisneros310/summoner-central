@@ -1,5 +1,34 @@
 const axios = require("axios");
 
+// import the shieldbow library
+
+const { Client } = require('shieldbow');
+const client = new Client(process.env.RIOT_API_KEY);
+client.initialize({
+  cache: true,
+  storage: false,
+  region: 'na',
+  logger: {
+    enable: true,
+    level: 'WARN'
+  },
+  ratelimiter: {
+    strategy: 'spread',
+    throw: true, retry:
+    {
+      retries: 5,
+      retryDelay: 5000
+    }
+  },
+  fetch:
+  {
+    champions: false,
+    items: true,
+    runes: true,
+    summonerSpells: true
+  }
+});
+
 /**
  * Retrieves summoner information by summoner name.
  * @param {string} summonerName - The summoner's name.
@@ -9,19 +38,73 @@ const axios = require("axios");
 const getSummonerInfoByName = async (summonerName) => {
   try {
     console.log("INSIDE THE LOLCONTROLLER, summonerName: ", summonerName)
-    const response = await axios.get(
-      `https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${summonerName}`,
-      {
-        headers: {
-          "X-Riot-Token": process.env.RIOT_API_KEY,
-        },
-      }
-    );
-
-    const summonerInfo = response.data;
+    const summoner = await client.summoners.fetchBySummonerName(summonerName);
+    const summonerInfo = {
+      accountID: summoner.accountId,
+      id: summoner.id,
+      level: summoner.level,
+      name: summoner.name,
+      puuid: summoner.playerId,
+      profileIcon: summoner.profileIcon,
+      region: summoner.region,
+    };
     console.log('Below is the summonerInfo: \n\n', summonerInfo)
     console.log('the data type of summonerInfo is:', typeof summonerInfo)
-    return summonerInfo;
+
+    // retrieving summoner league entries (ranked stats)
+    const leagues = await summoner.fetchLeagueEntries();
+    const soloQ = leagues.get('RANKED_SOLO_5x5');
+    const flex = leagues.get('RANKED_FLEX_SR');
+    
+    const leagueEntries = {
+      soloQueueInfo: {},
+      flexQueueInfo: {},
+    };
+
+    if (soloQ) {
+      leagueEntries.soloQueueInfo = {
+        soloQueueTier: soloQ.tier || 'Unranked',
+        soloQueueDivision: soloQ.division  || 'Unranked',
+        soloQueueLP: soloQ.lp || 0,
+        soloQueueWins: soloQ.wins   || 0,
+        soloQueueLosses: soloQ.losses || 0,
+      };
+    } else {
+      leagueEntries.soloQueueInfo = {
+        soloQueueTier: 'Unranked',
+        soloQueueDivision: 'Unranked',
+        soloQueueLP: 0,
+        soloQueueWins: 0,
+        soloQueueLosses: 0,
+      };
+    }
+
+    if (flex) {
+      leagueEntries.flexQueueInfo = {
+        flexQueueTier: flex.tier || 'Unranked',
+        flexQueueDivision: flex.division || 'Unranked',
+        flexQueueLP: flex.lp || 0,
+        flexQueueWins: flex.wins || 0,
+        flexQueueLosses: flex.losses || 0,
+      };
+    } else {
+      leagueEntries.flexQueueInfo = {
+        flexQueueTier: 'Unranked',
+        flexQueueDivision: 'Unranked',
+        flexQueueLP: 0,
+        flexQueueWins: 0,
+        flexQueueLosses: 0,
+      };
+    }
+
+    const totalSummonerInfo = {
+      ...summonerInfo,
+      ...leagueEntries
+    }
+
+    console.log(totalSummonerInfo)
+
+    return totalSummonerInfo;
   } catch (error) {
     if (error.response) {
       if (error.response.status === 404) {
@@ -32,6 +115,7 @@ const getSummonerInfoByName = async (summonerName) => {
         throw new Error("Summoner name is invalid");
       }
     }
+    console.log(error)
     throw new Error("Error retrieving summoner information");
   }
 };

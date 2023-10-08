@@ -21,6 +21,7 @@
     "node-cache": "^5.1.2",
     "node-of-legends": "^2.0.2",
     "nodemon": "^2.0.22",
+    "shieldbow": "^2.2.0",
     "twisted": "^1.53.2",
     "validator": "^13.9.0"
   }
