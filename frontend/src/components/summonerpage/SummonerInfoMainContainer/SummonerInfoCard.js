@@ -1,5 +1,5 @@
 import React from "react";
-import "../../css/SummonerInfoCard.css"; // Import the CSS file with a relative path
+import "../../../css/SummonerInfoCard.css"; // Import the CSS file with a relative path
 
 const SummonerInfoCard = ({ summonerInfo }) => {
     var regionString = '';

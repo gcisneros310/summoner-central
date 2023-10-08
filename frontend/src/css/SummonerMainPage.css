@@ -12,13 +12,14 @@
 .summ-card-info-container {
   width: auto; /* Combined width of "2" and "3" */
   display: flex;
-  justify-content: center;
+  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
   height: 180px;
   border-radius: 8px;
   margin: 10px;
   padding: 10px;
-  background-color: aqua;
+  background-color: rgb(135, 253, 188);
 }
 
 .summoner-info-main-container {
