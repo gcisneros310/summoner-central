@@ -48,8 +48,6 @@ const getSummonerInfoByName = async (summonerName) => {
       profileIcon: summoner.profileIcon,
       region: summoner.region,
     };
-    console.log('Below is the summonerInfo: \n\n', summonerInfo)
-    console.log('the data type of summonerInfo is:', typeof summonerInfo)
 
     // retrieving summoner league entries (ranked stats)
     const leagues = await summoner.fetchLeagueEntries();
@@ -97,12 +95,26 @@ const getSummonerInfoByName = async (summonerName) => {
       };
     }
 
+    const championMastery = summoner.championMastery;
+    const highestMastery = await championMastery.highest();
+
+    const highestMasteryInfo = {
+      highestMasteryChamp: {
+        id: highestMastery.champion.key,
+        name: highestMastery.champion.name,
+      },
+      masteryLevel: highestMastery.level,
+      masteryPoints: highestMastery.points,
+    };
+
+    console.log('highestMastery:', highestMastery)
+
     const totalSummonerInfo = {
       ...summonerInfo,
-      ...leagueEntries
+      ...leagueEntries,
+      ...highestMasteryInfo,
     }
 
-    console.log(totalSummonerInfo)
 
     return totalSummonerInfo;
   } catch (error) {
