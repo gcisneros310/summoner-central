@@ -2,6 +2,7 @@ import HomePage from "./components/HomePage";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import SummonerMainPage from "./components/summonerpage/SummonerMainPage";
+import "./css/App.css"
 
 function App() {
   return (

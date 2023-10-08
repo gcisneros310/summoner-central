@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css?family=Proxima+Nova');
+
+.summ-info-maincard-container {
+    display: flex;
+    font-family: 'proxima-nova', sans-serif !important;
+    font-weight: lighter;
+    font-size: 16px;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 10px;
+    margin: 10px;
+    background-color: rgb(135, 253, 188);
+    border-radius: 8px;
+}
+
+.summ-card-icon {
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
+    margin-right: 20px;
+}
+
+.summ-card-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.summ-card-info-name {
+    font-size: 24px;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.summ-card-info-level {
+    font-size: 16px;
+}
