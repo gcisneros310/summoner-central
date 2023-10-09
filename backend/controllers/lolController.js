@@ -29,6 +29,59 @@ client.initialize({
   }
 });
 
+const createQueueInfo = (queue) => {
+  return queue ? {
+    tier: queue.tier,
+    division: queue.division,
+    lp: queue.lp,
+    wins: queue.wins,
+    losses: queue.losses,
+  } : {
+    tier: 'Unranked',
+    division: 'Unranked',
+    lp: 0,
+    wins: 0,
+    losses: 0,
+  };
+};
+
+const getLeagueEntries = async (summoner) => {
+  let leagues;
+  let leagueEntries = {};
+
+  try {
+    leagues = await summoner.fetchLeagueEntries();
+  } catch (error) {
+    console.log(error);
+    leagueEntries = {
+      soloQueueInfo: createQueueInfo(null),
+      flexQueueInfo: createQueueInfo(null),
+    };
+    return leagueEntries;
+  }
+
+  const soloQ = leagues.get('RANKED_SOLO_5x5');
+  const flex = leagues.get('RANKED_FLEX_SR');
+
+  if (!soloQ && !flex) {
+    console.log('soloQ and flex are both null');
+  }
+
+  if (soloQ || flex) {
+    leagueEntries = {
+      soloQueueInfo: createQueueInfo(soloQ),
+      flexQueueInfo: createQueueInfo(flex),
+    };
+  } else {
+    leagueEntries = {
+      soloQueueInfo: createQueueInfo(),
+      flexQueueInfo: createQueueInfo(),
+    };
+  }
+
+  return leagueEntries;
+};
+
 /**
  * Retrieves summoner information by summoner name.
  * @param {string} summonerName - The summoner's name.
@@ -37,67 +90,14 @@ client.initialize({
  */
 const getSummonerInfoByName = async (summonerName) => {
   try {
-    console.log("INSIDE THE LOLCONTROLLER, summonerName: ", summonerName)
     const summoner = await client.summoners.fetchBySummonerName(summonerName);
-    const summonerInfo = {
-      accountID: summoner.accountId,
-      id: summoner.id,
-      level: summoner.level,
-      name: summoner.name,
-      puuid: summoner.playerId,
-      profileIcon: summoner.profileIcon,
-      region: summoner.region,
-    };
+    const { accountId, id, level, name, playerId, profileIcon, region } = summoner;
+    const summonerInfo = { accountId, id, level, name, puuid: playerId, profileIcon, region };
 
-    // retrieving summoner league entries (ranked stats)
-    const leagues = await summoner.fetchLeagueEntries();
-    const soloQ = leagues.get('RANKED_SOLO_5x5');
-    const flex = leagues.get('RANKED_FLEX_SR');
-    
-    const leagueEntries = {
-      soloQueueInfo: {},
-      flexQueueInfo: {},
-    };
-
-    if (soloQ) {
-      leagueEntries.soloQueueInfo = {
-        soloQueueTier: soloQ.tier || 'Unranked',
-        soloQueueDivision: soloQ.division  || 'Unranked',
-        soloQueueLP: soloQ.lp || 0,
-        soloQueueWins: soloQ.wins   || 0,
-        soloQueueLosses: soloQ.losses || 0,
-      };
-    } else {
-      leagueEntries.soloQueueInfo = {
-        soloQueueTier: 'Unranked',
-        soloQueueDivision: 'Unranked',
-        soloQueueLP: 0,
-        soloQueueWins: 0,
-        soloQueueLosses: 0,
-      };
-    }
-
-    if (flex) {
-      leagueEntries.flexQueueInfo = {
-        flexQueueTier: flex.tier || 'Unranked',
-        flexQueueDivision: flex.division || 'Unranked',
-        flexQueueLP: flex.lp || 0,
-        flexQueueWins: flex.wins || 0,
-        flexQueueLosses: flex.losses || 0,
-      };
-    } else {
-      leagueEntries.flexQueueInfo = {
-        flexQueueTier: 'Unranked',
-        flexQueueDivision: 'Unranked',
-        flexQueueLP: 0,
-        flexQueueWins: 0,
-        flexQueueLosses: 0,
-      };
-    }
+    const leagueEntries = await getLeagueEntries(summoner);
 
     const championMastery = summoner.championMastery;
     const highestMastery = await championMastery.highest();
-
     const highestMasteryInfo = {
       highestMasteryChamp: {
         id: highestMastery.champion.key,
@@ -107,14 +107,11 @@ const getSummonerInfoByName = async (summonerName) => {
       masteryPoints: highestMastery.points,
     };
 
-    console.log('highestMastery:', highestMastery)
-
     const totalSummonerInfo = {
       ...summonerInfo,
-      ...leagueEntries,
+      leagueEntries,
       ...highestMasteryInfo,
-    }
-
+    };
 
     return totalSummonerInfo;
   } catch (error) {
@@ -126,8 +123,9 @@ const getSummonerInfoByName = async (summonerName) => {
       } else if (error.response.status === 400) {
         throw new Error("Summoner name is invalid");
       }
+
     }
-    console.log(error)
+    console.log(error);
     throw new Error("Error retrieving summoner information");
   }
 };
