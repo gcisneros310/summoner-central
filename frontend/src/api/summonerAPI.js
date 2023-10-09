@@ -1,4 +1,7 @@
 import axios from "axios";
+import NodeCache from "node-cache";
+
+const cache = new NodeCache();
 
 // sends request to apiRoutes endpoint to retrieve summoner information
 const getSummonerInfoByName = async (summonerName) => {
@@ -24,6 +27,12 @@ const getSummonerMasteries = async (summonerID) => {
 }
 
 export const getSummonerInformation = async (summonerName) => {
+    const cachedData = cache.get(summonerName);
+    if (cachedData) {
+        console.log('Data retrieved from cache');
+        return cachedData;
+    }
+
     const summonerInfoResponse = await getSummonerInfoByName(summonerName); // get summoner information object
     const summonerInfo = summonerInfoResponse.data;
     console.log("Summoner Info RETURNED FROM ENDPOINT: ", summonerInfo);
@@ -53,12 +62,12 @@ export const getSummonerInformation = async (summonerName) => {
         matchInfoObject[matchHistory[i]] = matchInfo; // store the match info in the object using the match ID as the key
     }
 
-    console.log('match info object is:', JSON.stringify(matchInfoObject));
-
     var completeSummonerData = {
         ...summonerDataAndMasteries,
         matchInformation: matchInfoObject,
     }
+
+    cache.set(summonerName, completeSummonerData);
 
     return completeSummonerData;
 };

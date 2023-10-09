@@ -10,14 +10,14 @@ client.initialize({
   region: 'na',
   logger: {
     enable: true,
-    level: 'WARN'
+    level: 'debug'
   },
   ratelimiter: {
     strategy: 'spread',
     throw: true, retry:
     {
       retries: 5,
-      retryDelay: 5000
+      retryDelay: 2500
     }
   },
   fetch:
@@ -29,6 +29,10 @@ client.initialize({
   }
 });
 
+
+// small helper function to create a queue info object
+// returns an object with the queue info if ranked stats exist for that queue type
+// otherwise, return an object with default values for unranked
 const createQueueInfo = (queue) => {
   return queue ? {
     tier: queue.tier,
@@ -45,6 +49,11 @@ const createQueueInfo = (queue) => {
   };
 };
 
+/**
+ * Retrieves league entries by summoner.
+ * @param {Object} summoner - The summoner object.
+ * @returns {Promise<Object>} - Object containing league entries.
+ **/
 const getLeagueEntries = async (summoner) => {
   let leagues;
   let leagueEntries = {};
@@ -126,7 +135,6 @@ const getSummonerInfoByName = async (summonerName) => {
 
     }
     console.log(error);
-    throw new Error("Error retrieving summoner information");
   }
 };
 
@@ -139,19 +147,24 @@ const getSummonerInfoByName = async (summonerName) => {
  */
 const getMatchListBySummID = async (puuid, summonerName) => {
   try {
-    const response = await axios.get(
-      `https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?count=1`,
-      {
-        headers: {
-          "X-Riot-Token": process.env.RIOT_API_KEY,
-        },
-      }
-    );
+    // const response = await axios.get(
+    //   `https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?count=1`,
+    //   {
+    //     headers: {
+    //       "X-Riot-Token": process.env.RIOT_API_KEY,
+    //     },
+    //   }
+    // );
 
-    const matchHistory = response.data;
-    console.log('the data type of match history is:', typeof matchHistory)
-    console.log('Below is the matchHistory: \n\n', matchHistory)
-    return matchHistory;
+    // const matchHistory = response.data;
+    // console.log('the data type of match history is:', typeof matchHistory)
+    // console.log('Below is the matchHistory: \n\n', matchHistory)
+    // return matchHistory;
+
+    console.log('getting match history in lolController.js')
+    const matchInformationByPuuid = await client.matches.fetchMatchListByPlayer(puuid);
+    console.log('matchInformationByPuuid big success:', matchInformationByPuuid);
+    return matchInformationByPuuid;
   } catch (error) {
     if (error.response) {
       if (error.response.status === 404) {
@@ -197,6 +210,31 @@ const getMatchInfoById = async (matchId) => {
     }
   }
 };
+
+// /**
+//  * Retrieves match information by match ID.
+//  * @param {string} matchId - The ID of the match.
+//  * @returns {Promise<Object>} - Object containing match information.
+//  * @throws {Error} - Throws an error if the match is not found.
+//  */
+// const getMatchInfoById = async (matchId) => {
+//   try {
+//     console.log('INSIDE THE LOLCONTROLLER, matchId: ', matchId);
+//     const matchInfo = await client.matches.fetch(matchId);
+
+//     const { client: shieldbowClient, ...matchInfoWithoutClient } = matchInfo;
+
+//     return matchInfoWithoutClient;
+//   } catch (error) {
+//     if (error.response && error.response.status === 404) {
+//       throw new Error(`Match "${matchId}" not found`);
+//     } else if (error.response && error.response.status === 403) {
+//       throw new Error("Riot API key is invalid");
+//     } else {
+//       throw new Error("Error retrieving match information");
+//     }
+//   }
+// };
 
 const getSummonerMasteries = async (summonerID) => {
   try {

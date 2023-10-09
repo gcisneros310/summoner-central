@@ -4,13 +4,10 @@ import "../../css/SummonerMainPage.css"; // Import the CSS file with a relative 
 import { useLocation } from 'react-router-dom';
 import SummonerInfoCard from "./SummonerInfoMainContainer/SummonerInfoCard";
 import SummonerMasteryCard from "./SummonerInfoMainContainer/SummonerMasteryCard";
-import { useEffect, useState } from "react";
-import axios from "axios";
 
 const SummonerMainPage = () => {
     const location = useLocation();
     const summonerInfo = location.state.summonerInfo;
-    console.log('THE SUMMONER INFO OBJ IS:', summonerInfo)
     console.log('highest mastery info is:', summonerInfo.highestMasteryChamp)
     
     return (
