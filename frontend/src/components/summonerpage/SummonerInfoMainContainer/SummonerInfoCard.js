@@ -1,8 +1,10 @@
-import React from "react";
 import "../../../css/SummonerInfoCard.css"; // Import the CSS file with a relative path
-
+import React, { useEffect, useState } from "react";
+import { getChampionAssetInfo } from "../../../api/summonerAPI"
 const SummonerInfoCard = ({ summonerInfo }) => {
-    var regionString = '';
+
+
+    let regionString = '';
     switch (summonerInfo.region) {
         case 'na':
             regionString = 'North America';
@@ -41,6 +43,7 @@ const SummonerInfoCard = ({ summonerInfo }) => {
             regionString = 'Unknown';
             break;
     }
+
 
     return (
         <div className='summ-info-maincard-container'>

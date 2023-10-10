@@ -1,7 +1,15 @@
 import axios from "axios";
 import NodeCache from "node-cache";
 
-const cache = new NodeCache();
+// standard time to live is one hour (3600 seconds)
+const summonerCache = new NodeCache({ stdTTL: 3600 });
+
+export const getChampionAssetInfo = async (championName) => {
+    console.log('summonerAPI invoked for champion asset info')
+    console.log(championName)
+    return await axios.get(`/api/champion-assets/${championName}`)
+}
+
 
 // sends request to apiRoutes endpoint to retrieve summoner information
 const getSummonerInfoByName = async (summonerName) => {
@@ -27,12 +35,13 @@ const getSummonerMasteries = async (summonerID) => {
 }
 
 export const getSummonerInformation = async (summonerName) => {
-    const cachedData = cache.get(summonerName);
-    if (cachedData) {
-        console.log('Data retrieved from cache');
-        return cachedData;
-    }
+    const cacheKey = `summonerInfo:${summonerName}`;
 
+    const cachedSummonerInfo = summonerCache.get(cacheKey);
+    if (cachedSummonerInfo) {
+        console.log("Summoner Info RETURNED FROM CACHE: ", cachedSummonerInfo);
+        return cachedSummonerInfo;
+    }
     const summonerInfoResponse = await getSummonerInfoByName(summonerName); // get summoner information object
     const summonerInfo = summonerInfoResponse.data;
     console.log("Summoner Info RETURNED FROM ENDPOINT: ", summonerInfo);
@@ -62,12 +71,13 @@ export const getSummonerInformation = async (summonerName) => {
         matchInfoObject[matchHistory[i]] = matchInfo; // store the match info in the object using the match ID as the key
     }
 
+    console.log('match info object is:', JSON.stringify(matchInfoObject));
+
     var completeSummonerData = {
         ...summonerDataAndMasteries,
         matchInformation: matchInfoObject,
     }
 
-    cache.set(summonerName, completeSummonerData);
-
+    summonerCache.set(cacheKey, completeSummonerData, 300);
     return completeSummonerData;
 };

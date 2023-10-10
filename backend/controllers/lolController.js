@@ -29,6 +29,44 @@ client.initialize({
   }
 });
 
+const getChampionAssetInfo = async (championName, res) => {
+  try {
+    const championInfo = await client.champions.fetch(championName);
+
+    // Create a sanitized version of the championInfo object
+    const filteredChampionInfo = {
+      championName: championInfo.name,
+      championKey: championInfo.key,
+      attackType: championInfo.attackType,
+      allyTips: championInfo.allyTips,
+      classes: championInfo.classes,
+      enemyTips: championInfo.enemyTips,
+      icon: championInfo.icon,
+      id: championInfo.id,
+      key: championInfo.key,
+      lore: championInfo.lore,
+      name: championInfo.name,
+      passive: championInfo.passive,
+      pricing: championInfo.pricing,
+      ratings: championInfo.ratings,
+      releaseDate: championInfo.releaseDate,
+      releasePatch: championInfo.releasePatch,
+      resource: championInfo.resource,
+      sprite: championInfo.sprite,
+      title: championInfo.title,
+    };
+
+    console.log('filteredChampionInfo:', filteredChampionInfo);
+
+    // Send the sanitized Champion object as a JSON response to the frontend
+    res.json(filteredChampionInfo);
+  } catch (error) {
+    console.log('Failed to retrieve champion info:', error);
+    // Handle errors and send an appropriate response to the frontend
+    res.status(500).json({ error: 'Failed to retrieve champion info' });
+  }
+};
+
 
 // small helper function to create a queue info object
 // returns an object with the queue info if ranked stats exist for that queue type
@@ -275,5 +313,6 @@ module.exports = {
   getSummonerInfoByName,
   getMatchListBySummID,
   getMatchInfoById,
-  getSummonerMasteries
+  getSummonerMasteries,
+  getChampionAssetInfo,
 };

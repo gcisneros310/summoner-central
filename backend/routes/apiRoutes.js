@@ -47,5 +47,18 @@ router.get('/get-summoner-masteries/:summonerID', async (req, res) => {
   }
 })
 
+// Define the champion-assets route
+router.get("/champion-assets/:championName", async (req, res) => {
+  const { championName } = req.params;
+  console.log(championName);
+  try {
+    await lolController.getChampionAssetInfo(championName, res); // Pass the response object
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
 
 module.exports = router;
