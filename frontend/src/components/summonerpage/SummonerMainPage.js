@@ -7,6 +7,7 @@ import SummonerMasteryCard from "./SummonerInfoMainContainer/SummonerMasteryCard
 import { Container, Row, Image, Col } from "react-bootstrap";
 import RankInfoContainer from "./SummonerInfoMainContainer/RankInfoContainer";
 import MatchHistoryCard from "./MatchHistoryCard/MatchHistoryCard";
+import UnrankedComponent from "./SummonerInfoMainContainer/UnrankedQueueInfo";
 
 const SummonerMainPage = () => {
     const [summonerID, setSummonerID] = useState("");
@@ -19,40 +20,50 @@ const SummonerMainPage = () => {
     const summonerMatchHistory = [];
 
     keys.forEach(element => {
-        summonerMatchHistory.push({element: summonerMatchHistoryObject[element]});
+        summonerMatchHistory.push({ element: summonerMatchHistoryObject[element] });
     });
 
     console.log('Data', summonerInfo);
-    
-    useEffect(()=> {
+
+    useEffect(() => {
         setSummonerID(location.state.summonerInfo.id);
     }, [])
+
+    console.log('summoner rank info', summonerInfo.leagueEntries.soloQueueInfo.division)
     return (
-        <div className='main-container' style={{background: "#070720"}}>
+        <div className='main-container' style={{ background: "#070720" }}>
             <HomePageNavBar className="homepage-nav-bar" />
             <div className="summoner-main-page">
                 <div className="summoner-info-main-container">
                     <div className="summoner-info-bg-container">
                         <div className="summoner-info-bg">
                             <div className="bg-container">
-                                <Image src="https://static.bigbrain.gg/assets/lol/riot_static/13.19.1/img/splash/Thresh_1.jpg" style={{ width: "100%", maxWidth: "500px"}}/>
+                                <Image src="https://static.bigbrain.gg/assets/lol/riot_static/13.19.1/img/splash/Thresh_1.jpg" style={{ width: "100%", maxWidth: "500px" }} />
                             </div>
                             <div className="gradient-container">
                                 <div className="gradient"></div>
                             </div>
                         </div>
                     </div>
-                
-                  <div className="summ-card-info-container">
-                  <SummonerInfoCard summonerInfo={summonerInfo} />
-                    <SummonerMasteryCard highestMasteryChamp={summonerInfo.highestMasteryChamp} />
-                  </div>
+
+                    <div className="summ-card-info-container">
+                        <SummonerInfoCard summonerInfo={summonerInfo} />
+                        <SummonerMasteryCard highestMasteryChamp={summonerInfo.summonerMasteries[0]} />
+                    </div>
                     <div className="summ-stats">
                         <div className="summ-ranked-flex-wr-container">
                             <Container className='ranked-info-container'>
-                                <RankInfoContainer rankinfo={summonerInfo.leagueEntries.soloQueueInfo} />
+                                {summonerInfo.leagueEntries.soloQueueInfo.division === "Unranked"
+                                    ? <UnrankedComponent />
+                                    : <RankInfoContainer rankinfo={summonerInfo.leagueEntries.soloQueueInfo} />
+                                }
                             </Container>
-                            <div className='ranked-info-container'>summone rank flex</div>
+                            <Container className='ranked-info-container'>
+                                {summonerInfo.leagueEntries.flexQueueInfo.division === "Unranked"
+                                    ? <UnrankedComponent />
+                                    : <RankInfoContainer rankinfo={summonerInfo.leagueEntries.flexQueueInfo} />
+                                }
+                            </Container>
                             <div className="champ-wr-container">champ winrates</div>
                         </div>
                         <div className="summ-match-history-container">
@@ -60,7 +71,7 @@ const SummonerMainPage = () => {
                             {/* Make this into a component for W and L */}
                             {/* Begin */}
                             {summonerMatchHistory.map((matchHistoryData, index) => {
-                                console.log(summonerId);
+                                // console.log(summonerId);
                                 return <MatchHistoryCard matchHistoryData={matchHistoryData} summonerId={summonerID} />;
                             })}
                             {/* End */}

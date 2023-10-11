@@ -2,8 +2,6 @@ import "../../../css/SummonerInfoCard.css"; // Import the CSS file with a relati
 import React, { useEffect, useState } from "react";
 import { getChampionAssetInfo } from "../../../api/summonerAPI"
 const SummonerInfoCard = ({ summonerInfo }) => {
-
-
     let regionString = '';
     switch (summonerInfo.region) {
         case 'na':

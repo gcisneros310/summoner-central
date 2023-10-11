@@ -10,7 +10,7 @@ const MatchHistoryCard = (matchHistoryData, summonerId) => {
     const [teamTwo, setTeamTwo] = useState([]);
     const location = useLocation();
     const id = location.state.summonerInfo.id;
-    console.log("PROPS", matchHistoryData.matchHistoryData.element.info);
+    // console.log("PROPS", matchHistoryData.matchHistoryData.element.info);
     const tempTeamOne = [];
     const tempTeamTwo = [];
     useEffect(()=>{
@@ -32,7 +32,7 @@ const MatchHistoryCard = (matchHistoryData, summonerId) => {
         setTeamTwo(tempTeamTwo);
     },[])
 
-    console.log("GameStatus", winStatus);
+    // console.log("GameStatus", winStatus);
 
     return (
         <Container className={winStatus === true ? ("win-banner-color") : ("loss-banner-color")} style={{display: "flex", minHeight: "80px", borderRadius: "4px", marginBottom: "16px"}}>

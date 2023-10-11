@@ -7,6 +7,7 @@ const lolController = require("../controllers/lolController");
 router.get("/summoner/:summonerName", async (req, res) => {
   const summonerName = req.params.summonerName;
   try {
+    console.log('summonerName in apiRoutes:', summonerName)
     const summonerInfo = await lolController.getSummonerInfoByName(summonerName);
     res.json(summonerInfo);
   } catch (error) {
@@ -48,11 +49,11 @@ router.get('/get-summoner-masteries/:summonerID', async (req, res) => {
 })
 
 // Define the champion-assets route
-router.get("/champion-assets/:championName", async (req, res) => {
-  const { championName } = req.params;
-  console.log(championName);
+router.get("/champion-assets/:championId", async (req, res) => {
+  const { championId } = req.params;
+  console.log(championId);
   try {
-    await lolController.getChampionAssetInfo(championName, res); // Pass the response object
+    await lolController.getChampionAssetInfo(championId, res); // Pass the response object
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal server error' });

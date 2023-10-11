@@ -1,9 +1,28 @@
 const axios = require("axios");
 
-// import the shieldbow library
+// we are trying riot-api now
+// const { RiotAPI, RiotAPITypes, PlatformId } = require('@fightmegg/riot-api');
 
+// const rAPI = new RiotAPI(
+//   process.env.RIOT_API_KEY,
+//   config = {
+//     debug: false,
+//     cache: {
+//       cacheType: 'local',
+//       client: null,
+//       ttls: {
+//         byMethod: {
+//           [RiotAPITypes.METHOD_KEY.SUMMONER.GET_BY_SUMMONER_NAME]: 5000, // ms
+//         }
+//       }
+
+//     }
+//   });
+
+// import the shieldbow library
 const { Client } = require('shieldbow');
 const client = new Client(process.env.RIOT_API_KEY);
+
 client.initialize({
   cache: true,
   storage: false,
@@ -17,21 +36,21 @@ client.initialize({
     throw: true, retry:
     {
       retries: 5,
-      retryDelay: 2500
+      retryDelay: 5000
     }
   },
   fetch:
   {
-    champions: false,
+    champions: true,
     items: true,
     runes: true,
     summonerSpells: true
   }
 });
 
-const getChampionAssetInfo = async (championName, res) => {
+const getChampionAssetInfo = async (championId, res) => {
   try {
-    const championInfo = await client.champions.fetch(championName);
+    const championInfo = await client.champions.fetchByKey(championId);
 
     // Create a sanitized version of the championInfo object
     const filteredChampionInfo = {
@@ -137,34 +156,45 @@ const getLeagueEntries = async (summoner) => {
  */
 const getSummonerInfoByName = async (summonerName) => {
   try {
+    console.log('summonerName:', summonerName)
     const summoner = await client.summoners.fetchBySummonerName(summonerName);
-    const { accountId, id, level, name, playerId, profileIcon, region } = summoner;
-    const summonerInfo = { accountId, id, level, name, puuid: playerId, profileIcon, region };
+    // const summoner = await rAPI.summoner.getBySummonerName({
+    //   region: PlatformId.NA1,
+    //   summonerName: summonerName
+    // });
 
+    const { id, accountId, level, name, playerId, profileIcon, region } = summoner;
+
+    const summonerInfo = { accountId, id, level, name, puuid: playerId, profileIcon, region };
+    console.log('summonerInfo:', summonerInfo)
+    
     const leagueEntries = await getLeagueEntries(summoner);
 
-    const championMastery = summoner.championMastery;
-    const highestMastery = await championMastery.highest();
-    const highestMasteryInfo = {
-      highestMasteryChamp: {
-        id: highestMastery.champion.key,
-        name: highestMastery.champion.name,
-      },
-      masteryLevel: highestMastery.level,
-      masteryPoints: highestMastery.points,
-    };
+    console.log('leagueEntries:', leagueEntries)
+
+    // const championMastery = summoner.championMastery;
+    // const highestMastery = await championMastery.highest();
+    // const highestMasteryInfo = {
+    //   highestMasteryChamp: {
+    //     id: highestMastery.champion.key,
+    //     name: highestMastery.champion.name,
+    //   },
+    //   masteryLevel: highestMastery.level,
+    //   masteryPoints: highestMastery.points,
+    // };
 
     const totalSummonerInfo = {
       ...summonerInfo,
       leagueEntries,
-      ...highestMasteryInfo,
+      // ...highestMasteryInfo,
     };
 
     return totalSummonerInfo;
   } catch (error) {
     if (error.response) {
       if (error.response.status === 404) {
-        throw new Error(`Summoner "${summonerName}" not found`);
+        console.log('error was :', error)
+        throw new Error(`Summoner "${summonerName}" not found uhh idk why`);
       } else if (error.response.status === 403) {
         throw new Error("Riot API key is invalid");
       } else if (error.response.status === 400) {
@@ -293,7 +323,7 @@ const getSummonerMasteries = async (summonerID) => {
     return summonerMasteries;
   } catch (error) {
     if (error.response && error.response.status === 404) {
-      throw new Error(`Summoner "${summonerID}" not found`);
+      throw new Error(`Summoner "${summonerID}" not found for some dumb reason`);
     } else if (error.response && error.response.status === 403) {
       throw new Error("Riot API key is invalid");
     } else if (error.response && error.response.status === 400) {
@@ -307,7 +337,6 @@ const getSummonerMasteries = async (summonerID) => {
     }
   }
 }
-
 
 module.exports = {
   getSummonerInfoByName,

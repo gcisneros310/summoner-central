@@ -20,17 +20,26 @@
 .summ-mastery-info {
     display: flex;
     flex-direction: column;
-    justify-content:flex-start;
-    align-items: flex-start;
-    
+    justify-content:space-between;
+    align-items: flex-start;    
 }
 
 .summ-mastery-text1 {
     font-size: 18px;
+    font-weight: 600;
+}
+
+.summ-mastery-text1, .summ-mastery-text2, .summ-mastery-text3 {
+  color: white;
+  padding: 2px;
 }
 
 .champ-icon {
     position: relative;
+}
+
+.italic {
+  font-style: italic;
 }
 
 .champ-icon::before {

@@ -1,13 +1,13 @@
 import axios from "axios";
 import NodeCache from "node-cache";
 
-// standard time to live is one hour (3600 seconds)
-const summonerCache = new NodeCache({ stdTTL: 3600 });
+// standard time to live is TWO hours (7200 seconds)
+const summonerCache = new NodeCache({ stdTTL: 7200 });
 
-export const getChampionAssetInfo = async (championName) => {
+export const getChampionAssetInfo = async (championId) => {
     console.log('summonerAPI invoked for champion asset info')
-    console.log(championName)
-    return await axios.get(`/api/champion-assets/${championName}`)
+    console.log(championId)
+    return await axios.get(`/api/champion-assets/${championId}`)
 }
 
 
@@ -31,6 +31,7 @@ const getMatchInfoByMatchID = async (matchID) => {
 
 const getSummonerMasteries = async (summonerID) => {
     console.log('summonerAPI invoked for summoner masteries')
+    console.log('summonerID:', summonerID)
     return await axios.get(`/api/get-summoner-masteries/${summonerID}`)
 }
 
