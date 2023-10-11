@@ -17,7 +17,7 @@ const HomePageNavBar = () => {
   }, [dispatch]);
 
   return (
-    <div className="navbar-container">
+    <div className="navbar-container" style={{background: "#070720"}}>
       <div className="navbar-brand" id="summoner-central">
         Summoner Central 
       </div>

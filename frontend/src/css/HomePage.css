@@ -105,6 +105,7 @@ make the color of the button rgb(163, 253, 163)
   width: 80px;
   margin-left: 10px;
   background-color: rgb(163, 253, 163) !important; /* add !important */
+  border-radius: 3px !important;
   color: black !important;   
   font-weight: bold;
 }
@@ -120,6 +121,8 @@ make the color of the button rgb(163, 253, 163)
   width: 85px;
   margin-left: 10px;
   background-color: rgb(163, 253, 163) !important; /* add !important */
+  border-radius: 3px !important;
+
   color: black !important;   
   font-weight: bold;
 }

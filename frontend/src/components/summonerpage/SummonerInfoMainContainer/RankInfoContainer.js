@@ -11,7 +11,7 @@ const RankInfoContainer = ({ rankinfo }) => {
                 <div className='rank-lp'></div>
                 <div className='rank-winrate'></div>
             </Container>
-            {/* <Row>
+            <Row>
                 <Col>
                     <Card>
                         <Card.Body>
@@ -22,7 +22,7 @@ const RankInfoContainer = ({ rankinfo }) => {
                     </Card>
                 </Col>
         
-            </Row> */}
+            </Row>
         </Container>
     );
 };
