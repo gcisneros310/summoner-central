@@ -1,5 +1,46 @@
 @import url('https://fonts.googleapis.com/css?family=Proxima+Nova');
 
+body {
+  color: #FFFFFF;
+}
+.summoner-info-bg-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: -1;
+  height: 100%;
+}
+.summoner-info-bg {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.bg-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  position: sticky;
+  top: 60px;
+  width: 100%;
+  height: 700px;
+  overflow: hidden;
+}
+.gradient-container {
+  position: sticky;
+  top: 60px;
+  width: 100%;
+  height: 800px;
+  margin-top: -700px;
+}
+.gradient {
+  z-index: 1999;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-position: 50% -50px;
+    background-image: radial-gradient(50% 40% at 48% 23%,rgba(7,7,32,0) 20%,#070720 100%),linear-gradient(90deg,#070720,rgba(7,7,32,0)),linear-gradient(0deg,#070720 10%,rgba(7,7,32,0));
+}
 .summoner-main-page {
   font-family: 'proxima-nova', sans-serif !important;
   font-weight: lighter;
@@ -16,16 +57,17 @@
   justify-content: space-between;
   align-items: center;
   height: 180px;
-  border-radius: 8px;
+  border-radius: 3px;
   margin: 10px;
   padding: 10px;
-  background-color: rgb(135, 253, 188);
+  background-color: rgb(7, 7, 32);
 }
 
 .summoner-info-main-container {
   justify-content: center;
   align-items: center;
   padding: 10px;
+  background: #070720;
 }
 
 .summ-stats {
@@ -40,8 +82,8 @@
   width: 25%;
   padding: 10px;
   margin: 10px;
-  border-radius: 8px;
-  background-color: rgb(135, 253, 188);
+  border-radius: 3px;
+  background-color: #191937;
   position: relative;
   align-self: flex-start;
   align-items: center;
@@ -49,14 +91,31 @@
 }
 
 .summ-match-history-container {
+  overflow: auto;
   width: 75%;
-  background-color: gray;
+  background-color: #191937;
   padding: 10px;
   margin: 10px;
-  border-radius: 8px;
+  border-radius: 3px;
   height: 1000px;
 }
 
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(7, 7, 32);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
 
 .ranked-info-container, .champ-wr-container {
   width: auto;
@@ -64,10 +123,10 @@
   justify-content: center;
   align-items: center;
   height: 180px;
-  border-radius: 8px;
+  border-radius: 3px;
   margin: 10px;
   padding: 10px;
-  background-color: gray;
+  background-color: #191937;
 
 }
 

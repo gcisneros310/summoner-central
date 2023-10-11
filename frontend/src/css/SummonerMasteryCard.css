@@ -11,9 +11,12 @@
   border-radius: 8px;
   margin: 10px;
   padding: 10px;
-  background-color: yellow
+  background-color: rgb(7, 7, 32);
 }
 
+.img-container {
+  background: linear-gradient(to right, transparent, mistyrose), url(https://ddragon.leagueoflegends.com/cdn/13.19.1/img/champion/Mordekaiser.png);
+}
 .summ-mastery-info {
     display: flex;
     flex-direction: column;

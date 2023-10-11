@@ -27,6 +27,9 @@ const SummonerMasteryCard = ({ highestMasteryChamp }) => {
                 <div className='summ-mastery-text2'>Mastery Rank: {highestMasteryChamp.rank}</div>
                 <div className='summ-mastery-text3'>Total Points: {highestMasteryChamp.points}</div>
             </div>
+            <div className='img-container'>
+
+            </div>
             <Image className='champ-icon' src={championObject.icon} alt='champ icon' fluid />
         </Container>
     );

@@ -1,0 +1,22 @@
+p {
+    margin: 0px;
+}
+.win-banner-color {
+    background: linear-gradient(0deg,rgba(50,115,250,.2),rgba(50,115,250,.2)),#191937;
+}
+.loss-banner-color {
+    background: linear-gradient(0deg,rgba(255,78,80,.16),rgba(255,78,80,.16)),#191937;
+}
+.win-label,
+.loss-label {
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.win-label {
+    color: #3273fa;
+}
+
+.loss-label {
+    color: #ff4e50;
+}
