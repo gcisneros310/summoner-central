@@ -4,6 +4,8 @@ import "../../css/SummonerMainPage.css"; // Import the CSS file with a relative 
 import { useLocation } from 'react-router-dom';
 import SummonerInfoCard from "./SummonerInfoMainContainer/SummonerInfoCard";
 import SummonerMasteryCard from "./SummonerInfoMainContainer/SummonerMasteryCard";
+import { Container } from "react-bootstrap";
+import RankInfoContainer from "./SummonerInfoMainContainer/RankInfoContainer";
 
 const SummonerMainPage = () => {
     const location = useLocation();
@@ -21,8 +23,9 @@ const SummonerMainPage = () => {
                   </div>
                     <div className="summ-stats">
                         <div className="summ-ranked-flex-wr-container">
-                            2
-                            <div className='ranked-info-container'>summoner rank solo</div>
+                            <Container className='ranked-info-container'>
+                                <RankInfoContainer rankinfo={summonerInfo.leagueEntries.soloQueueInfo} />
+                            </Container>
                             <div className='ranked-info-container'>summone rank flex</div>
                             <div className="champ-wr-container">champ winrates</div>
                         </div>

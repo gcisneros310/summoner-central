@@ -1,10 +1,12 @@
 import React from 'react';
-// import './SummonerMasteryCard.css';
+import '../../../css/SummonerMasteryCard.css';
 import { getChampionAssetInfo } from '../../../api/summonerAPI';
 import { useState, useEffect } from 'react';
+import { Container, Image } from 'react-bootstrap/';
+
 
 // import shieldbowClient from '../../../api/shieldbow';
-const SummonerMasteryCard = ({highestMasteryChamp}) => {
+const SummonerMasteryCard = ({ highestMasteryChamp }) => {
     const [championObject, setChampionObject] = useState({});
 
     useEffect(() => {
@@ -19,9 +21,14 @@ const SummonerMasteryCard = ({highestMasteryChamp}) => {
 
     console.log('champion object:', championObject)
     return (
-        <div className='summ-mastery-card-container'>
-            {highestMasteryChamp.name}
-        </div>
+        <Container className='summ-mastery-card-container'>
+            <div className='summ-mastery-info'>
+                <div className='summ-mastery-text1'>Highest Mastery: {highestMasteryChamp.name}</div>
+                <div className='summ-mastery-text2'>Mastery Rank: {highestMasteryChamp.rank}</div>
+                <div className='summ-mastery-text3'>Total Points: {highestMasteryChamp.points}</div>
+            </div>
+            <Image className='champ-icon' src={championObject.icon} alt='champ icon' fluid />
+        </Container>
     );
 };
 
