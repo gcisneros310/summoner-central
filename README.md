@@ -11,7 +11,7 @@ Project frontend is a bit barren for now as its still a work in progress. Howeve
 There is no deployment... yet
 ## Screenshots
 
-![App Screenshot](https://imgur.com/BRJgtvE)
+![App Screenshot]([https://imgur.com/BRJgtvE](https://i.imgur.com/BRJgtvE.png))
 
 
 ## Features
