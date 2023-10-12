@@ -1,4 +1,3 @@
-![image](https://github.com/gcisneros310/summoner-central/assets/48630000/af0a4d15-d8d2-4a62-87f8-07510dda5bef)
 # Summoner Central
 
 Summoner Central is a tool for League of Legends players to search and view summoner information. Users are allowsed to type in a summoner name and summoner information is retrieved, such as the summoner's name, ranks, winrates, and match history with details. 
