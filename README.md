@@ -11,7 +11,7 @@ Project frontend is a bit barren for now as its still a work in progress. Howeve
 There is no deployment... yet
 ## Screenshots
 
-![App Screenshot]([https://imgur.com/BRJgtvE](https://i.imgur.com/BRJgtvE.png))
+[<img src="[https://i.imgur.com/k4ZYqy7.png](https://i.imgur.com/BRJgtvE.png)" width="300">](https://i.imgur.com/BRJgtvE.png)
 
 
 ## Features
