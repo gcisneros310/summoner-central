@@ -1,24 +1,5 @@
 const axios = require("axios");
 
-// we are trying riot-api now
-// const { RiotAPI, RiotAPITypes, PlatformId } = require('@fightmegg/riot-api');
-
-// const rAPI = new RiotAPI(
-//   process.env.RIOT_API_KEY,
-//   config = {
-//     debug: false,
-//     cache: {
-//       cacheType: 'local',
-//       client: null,
-//       ttls: {
-//         byMethod: {
-//           [RiotAPITypes.METHOD_KEY.SUMMONER.GET_BY_SUMMONER_NAME]: 5000, // ms
-//         }
-//       }
-
-//     }
-//   });
-
 // import the shieldbow library
 const { Client } = require('shieldbow');
 const client = new Client(process.env.RIOT_API_KEY);
@@ -48,11 +29,18 @@ client.initialize({
   }
 });
 
+/**
+ * Retrieves league entries by summoner.
+ * @param {championId} championId - The champion's ID.
+ * @param {Object} res - The response object.
+ **/
 const getChampionAssetInfo = async (championId, res) => {
   try {
     const championInfo = await client.champions.fetchByKey(championId);
 
     // Create a sanitized version of the championInfo object
+    // this prevents any circular references from being sent to the frontend
+    // thankfully the eliminated fields are not needed for the frontend
     const filteredChampionInfo = {
       championName: championInfo.name,
       championKey: championInfo.key,
@@ -90,6 +78,11 @@ const getChampionAssetInfo = async (championId, res) => {
 // small helper function to create a queue info object
 // returns an object with the queue info if ranked stats exist for that queue type
 // otherwise, return an object with default values for unranked
+/**
+ * 
+ * @param {queue} queue - The queue object.
+ * @returns 
+ */
 const createQueueInfo = (queue) => {
   return queue ? {
     tier: queue.tier,
@@ -107,7 +100,7 @@ const createQueueInfo = (queue) => {
 };
 
 /**
- * Retrieves league entries by summoner.
+ * Retrieves league entries by summoner, for both solo queue and flex queue ranks.
  * @param {Object} summoner - The summoner object.
  * @returns {Promise<Object>} - Object containing league entries.
  **/
@@ -158,37 +151,16 @@ const getSummonerInfoByName = async (summonerName) => {
   try {
     console.log('summonerName:', summonerName)
     const summoner = await client.summoners.fetchBySummonerName(summonerName);
-    // const summoner = await rAPI.summoner.getBySummonerName({
-    //   region: PlatformId.NA1,
-    //   summonerName: summonerName
-    // });
-
     const { id, accountId, level, name, playerId, profileIcon, region } = summoner;
-
     const summonerInfo = { accountId, id, level, name, puuid: playerId, profileIcon, region };
-    console.log('summonerInfo:', summonerInfo)
-    
+
     const leagueEntries = await getLeagueEntries(summoner);
-
-    console.log('leagueEntries:', leagueEntries)
-
-    // const championMastery = summoner.championMastery;
-    // const highestMastery = await championMastery.highest();
-    // const highestMasteryInfo = {
-    //   highestMasteryChamp: {
-    //     id: highestMastery.champion.key,
-    //     name: highestMastery.champion.name,
-    //   },
-    //   masteryLevel: highestMastery.level,
-    //   masteryPoints: highestMastery.points,
-    // };
 
     const totalSummonerInfo = {
       ...summonerInfo,
       leagueEntries,
       // ...highestMasteryInfo,
     };
-
     return totalSummonerInfo;
   } catch (error) {
     if (error.response) {
@@ -200,7 +172,6 @@ const getSummonerInfoByName = async (summonerName) => {
       } else if (error.response.status === 400) {
         throw new Error("Summoner name is invalid");
       }
-
     }
     console.log(error);
   }
@@ -215,20 +186,6 @@ const getSummonerInfoByName = async (summonerName) => {
  */
 const getMatchListBySummID = async (puuid, summonerName) => {
   try {
-    // const response = await axios.get(
-    //   `https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?count=1`,
-    //   {
-    //     headers: {
-    //       "X-Riot-Token": process.env.RIOT_API_KEY,
-    //     },
-    //   }
-    // );
-
-    // const matchHistory = response.data;
-    // console.log('the data type of match history is:', typeof matchHistory)
-    // console.log('Below is the matchHistory: \n\n', matchHistory)
-    // return matchHistory;
-
     console.log('getting match history in lolController.js')
     const matchInformationByPuuid = await client.matches.fetchMatchListByPlayer(puuid);
     console.log('matchInformationByPuuid big success:', matchInformationByPuuid);
@@ -279,31 +236,12 @@ const getMatchInfoById = async (matchId) => {
   }
 };
 
-// /**
-//  * Retrieves match information by match ID.
-//  * @param {string} matchId - The ID of the match.
-//  * @returns {Promise<Object>} - Object containing match information.
-//  * @throws {Error} - Throws an error if the match is not found.
-//  */
-// const getMatchInfoById = async (matchId) => {
-//   try {
-//     console.log('INSIDE THE LOLCONTROLLER, matchId: ', matchId);
-//     const matchInfo = await client.matches.fetch(matchId);
-
-//     const { client: shieldbowClient, ...matchInfoWithoutClient } = matchInfo;
-
-//     return matchInfoWithoutClient;
-//   } catch (error) {
-//     if (error.response && error.response.status === 404) {
-//       throw new Error(`Match "${matchId}" not found`);
-//     } else if (error.response && error.response.status === 403) {
-//       throw new Error("Riot API key is invalid");
-//     } else {
-//       throw new Error("Error retrieving match information");
-//     }
-//   }
-// };
-
+/**
+ * Retrieves summoner masteries by summoner ID.
+ * @param {string} summonerID - The summoner's ID.
+ * @returns {Promise<Array>} - Array containing summoner masteries.
+ * @throws {Error} - Throws an error if the summoner is not found.
+ */
 const getSummonerMasteries = async (summonerID) => {
   try {
     console.log('INSIDE THE getSummonerMasteries\n');

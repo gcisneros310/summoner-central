@@ -23,8 +23,6 @@ const SummonerMainPage = () => {
         summonerMatchHistory.push({ element: summonerMatchHistoryObject[element] });
     });
 
-    console.log('Data', summonerInfo);
-
     useEffect(() => {
         setSummonerID(location.state.summonerInfo.id);
     }, [])
